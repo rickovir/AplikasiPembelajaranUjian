@@ -5,6 +5,7 @@
  */
 package aplikasipembelajaranujian;
 
+import java.io.*;
 /**
  *
  * @author hp431
@@ -47,6 +48,83 @@ public class Pengguna {
         namaPengguna = newNama;
         email = newEmail;
         kelas = newKelas;
+    }
+    
+    public void saveData()
+    {
+//        String fileName = "Pengguna.txt";
+//
+//        try {
+//            // Assume default encoding.
+//            FileWriter fileWriter =
+//                new FileWriter(fileName);
+//
+//            // Always wrap FileWriter in BufferedWriter.
+//            BufferedWriter bufferedWriter =
+//                new BufferedWriter(fileWriter);
+//
+//            // Note that write() does not automatically
+//            // append a newline character.
+//            bufferedWriter.write("Hello there,");
+//            bufferedWriter.write(" here is some text.");
+//            bufferedWriter.newLine();
+//            bufferedWriter.write("We are writing");
+//            bufferedWriter.write(" the text to the file.");
+//
+//            // Always close files.
+//            bufferedWriter.close();
+//        }
+//        catch(IOException ex) {
+//            System.out.println(
+//                "Error writing to file '"
+//                + fileName + "'");
+//            // Or we could just do this:
+//            // ex.printStackTrace();
+//        }
+                String FILENAME = "Pengguna.txt";
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+
+		try {
+
+			String data = " This is new content";
+
+			File file = new File(FILENAME);
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			// true = append file
+			fw = new FileWriter(file.getAbsoluteFile(), true);
+			bw = new BufferedWriter(fw);
+
+			bw.write(data);
+                        bw.newLine();
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+		}
+
     }
     
     public void callData()
