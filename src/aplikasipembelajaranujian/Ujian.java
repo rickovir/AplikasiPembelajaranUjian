@@ -10,5 +10,7 @@ package aplikasipembelajaranujian;
  * @author hp431
  */
 public class Ujian {
-    
+    private int idUjian;
+    private String namaUjian;
+    private String tanggal;
 }
