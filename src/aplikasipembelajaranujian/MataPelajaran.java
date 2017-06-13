@@ -10,5 +10,6 @@ package aplikasipembelajaranujian;
  * @author hp431
  */
 public class MataPelajaran {
-    
+    private int kodeMataPelajaran;
+    private String namaMataPelajaran;
 }
