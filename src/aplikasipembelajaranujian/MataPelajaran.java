@@ -9,7 +9,32 @@ package aplikasipembelajaranujian;
  *
  * @author hp431
  */
-public class MataPelajaran {
-    private int kodeMataPelajaran;
+public class MataPelajaran extends TingkatKelas{
+    private int idMataPelajaran;
     private String namaMataPelajaran;
+    
+    public int getIdMataPelajaran()
+    {
+        return idMataPelajaran;
+    }
+    public String getNamaMataPelajaran()
+    {
+        return namaMataPelajaran;
+    }
+    public void tambah()
+    {
+        
+    }
+    public void hapus()
+    {
+        
+    }
+    public void edit()
+    {
+        
+    }
+    public void tampil()
+    {
+        
+    }
 }

@@ -11,5 +11,39 @@ package aplikasipembelajaranujian;
  * @author hp431
  */
 public class TingkatKelas {
+    private int tingkatan;
+    private String namaKelas;
     
+    public void setTingkatan(int newTingkat)
+    {
+        tingkatan = newTingkat;
+    }
+    public int getTingkatan()
+    {
+        return tingkatan;
+    }
+    public void setNamaKelas(String newNamaKelas)
+    {
+        namaKelas = newNamaKelas;
+    }
+    public String getNamaKelas()
+    {
+        return namaKelas;
+    }
+    public void tambah()
+    {
+        
+    }
+    public void hapus()
+    {
+        
+    }
+    public void edit()
+    {
+        
+    }
+    public void tampil()
+    {
+        
+    }
 }

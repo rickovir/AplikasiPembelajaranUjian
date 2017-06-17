@@ -12,10 +12,10 @@ import java.io.*;
  */
 public class Pengguna {
     private int idPengguna;
-    private char kelas;
+    private int kelas;
     private String namaPengguna;
     private String email;
-    private String tgl_lahir;
+    private String tglLahir;
     private boolean vertificationStatus;
     
     public int getIdPengguna()
@@ -43,7 +43,7 @@ public class Pengguna {
         return vertificationStatus;
     }
     
-    public void editBiodata(String newNama, String newEmail, char newKelas)
+    public void editBiodata(String newNama, String newEmail, int newKelas)
     {
         namaPengguna = newNama;
         email = newEmail;
@@ -81,7 +81,7 @@ public class Pengguna {
 //            // Or we could just do this:
 //            // ex.printStackTrace();
 //        }
-                String FILENAME = "Pengguna.txt";
+                String FILENAME = "src/data/Pengguna.txt";
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 
@@ -95,12 +95,12 @@ public class Pengguna {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-
 			// true = append file
 			fw = new FileWriter(file.getAbsoluteFile(), true);
 			bw = new BufferedWriter(fw);
 
-			bw.write(data);
+			bw.write("#namaPengguna:" + namaPengguna);
+			bw.write("#email:" + email);
                         bw.newLine();
 			System.out.println("Done");
 
@@ -125,10 +125,5 @@ public class Pengguna {
 			}
 		}
 
-    }
-    
-    public void callData()
-    {
-        
     }
 }

@@ -9,8 +9,41 @@ package aplikasipembelajaranujian;
  *
  * @author hp431
  */
-public class Ujian {
+public class Ujian extends MataPelajaran {
     private int idUjian;
     private String namaUjian;
-    private String tanggal;
+//    private String tanggal;
+    
+    public int getIdUjian()
+    {
+        return idUjian;
+    }
+    public String getNamaUjian()
+    {
+        return namaUjian;
+    }
+    public void setNamaUjian(String newNama)
+    {
+        namaUjian = newNama;
+    }
+//    public String tanggal()
+//    {
+//        return tanggal;
+//    }
+    public void tambah()
+    {
+        
+    }
+    public void hapus()
+    {
+        
+    }
+    public void edit()
+    {
+        
+    }
+    public void tampil()
+    {
+        
+    } 
 }
