@@ -4,28 +4,42 @@
  * and open the template in the editor.
  */
 package aplikasipembelajaranujian;
-
 import java.io.*;
+import data.Database;
 /**
  *
  * @author hp431
  */
+
+
 public class Pengguna {
     private int idPengguna;
-    private int kelas;
+    private int idKelas;
     private String namaPengguna;
-    private String email;
-    private String tglLahir;
-    private boolean vertificationStatus;
+    private String username;
+    private String password;
+    private int verificationStatus;
+    private Database db;
+    
+    public Pengguna()
+    {
+        idPengguna = 0;
+        idKelas = 0;
+        namaPengguna = "";
+        username ="";
+        password = "";
+        verificationStatus = 0;
+        db = new Database();
+    }
     
     public int getIdPengguna()
     {
         return idPengguna;
     }
     
-    public int getKelas()
+    public int getIdKelas()
     {
-        return kelas;
+        return idKelas;
     }
     
     public String getNamaPengguna()
@@ -33,21 +47,64 @@ public class Pengguna {
         return namaPengguna;
     }
     
-    public String getEmail()
+    public String getUsername()
     {
-        return email;
+        return username;
     }
     
-    public boolean getVertificationStatus()
+    public String getPassword()
     {
-        return vertificationStatus;
+        return password;
+    }
+    
+    public int getVerificationStatus()
+    {
+        return verificationStatus;
+    }
+    
+    public void setNamaPengguna(String newNama)
+    {
+        namaPengguna = newNama;
+    }
+    
+    public void setUsername(String newUsername)
+    {
+        username = newUsername;
+    }
+    
+    public void setPassword(String newPassword)
+    {
+        password = newPassword;
+    }
+    
+    public void setVerificationStatus(int newStatus)
+    {
+        verificationStatus = newStatus;
+    }
+    
+    public void setIdKelas(int newIdKelas)
+    {
+        idKelas = newIdKelas;
+    }
+    
+    public void setIdPengguna(int newIdPengguna)
+    {
+        idPengguna = newIdPengguna;
     }
     
     public void editBiodata(String newNama, String newEmail, int newKelas)
     {
         namaPengguna = newNama;
-        email = newEmail;
-        kelas = newKelas;
+        username = newEmail;
+        idKelas = newKelas;
+    }
+    public void simpan()
+    {
+        String sql = "insert into pengguna(namaPengguna, "
+                + "username, password, verificationStatus, idKelas) values("
+                + "'"+namaPengguna+"', '"+username+"',"
+                + "'"+password+"', '1', '"+idKelas+"')";
+        db.insert(sql);
     }
     
     public void saveData()
@@ -100,7 +157,7 @@ public class Pengguna {
 			bw = new BufferedWriter(fw);
 
 			bw.write("#namaPengguna:" + namaPengguna);
-			bw.write("#email:" + email);
+			bw.write("#email:" + username);
                         bw.newLine();
 			System.out.println("Done");
 
