@@ -27,7 +27,7 @@ public class Database {
         password = "";
         init();
     }
-    
+    // function for initialize connection and build that
     public void init()
     {
         // this is initialitation  for connection
@@ -48,8 +48,8 @@ public class Database {
             }
         }
     }
-    
-    public ResultSet select(String sql)
+    // this function used to select data from a table and return back it with ResultSet Object
+    public ResultSet selectDataTable(String sql)
     {
         ResultSet resultSet = null;
         try
@@ -62,18 +62,8 @@ public class Database {
         }
         return resultSet;
     }
-    public void update(String sql)
-    {
-        try
-        {
-            statement.executeUpdate(sql);
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Error Update data : "+e);
-        }
-    }
-    public void insert(String sql)
+    // this function used to generate sql script that can modify a table like insert, update or delete rows from that table
+    public void modifyDataTable(String sql)
     {
         try
         {
@@ -84,16 +74,15 @@ public class Database {
             JOptionPane.showMessageDialog(null, "Error Update data : "+e);
         }
     }
-    
+    // this function used to close JDBC connection
     public void closeService()
     {
         try{
             connection.close();
-            
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-            JOptionPane.showMessageDialog(null, "Problem close connection");
+            JOptionPane.showMessageDialog(null, "Problem close connection : "+e);
         }
     }
 }

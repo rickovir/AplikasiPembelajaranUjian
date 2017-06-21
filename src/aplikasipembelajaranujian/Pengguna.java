@@ -5,7 +5,7 @@
  */
 package aplikasipembelajaranujian;
 import java.io.*;
-import data.Database;
+import data.Model;
 /**
  *
  * @author hp431
@@ -19,7 +19,7 @@ public class Pengguna {
     private String username;
     private String password;
     private int verificationStatus;
-    private Database db;
+    private Model modelTable;
     
     public Pengguna()
     {
@@ -29,7 +29,7 @@ public class Pengguna {
         username ="";
         password = "";
         verificationStatus = 0;
-        db = new Database();
+        modelTable = new Model();
     }
     
     public int getIdPengguna()
@@ -103,8 +103,8 @@ public class Pengguna {
         String sql = "insert into pengguna(namaPengguna, "
                 + "username, password, verificationStatus, idKelas) values("
                 + "'"+namaPengguna+"', '"+username+"',"
-                + "'"+password+"', '1', '"+idKelas+"')";
-        db.insert(sql);
+                + "'"+password+"', '"+verificationStatus+"', '"+idKelas+"')";
+        //db.insert(sql);
     }
     
     public void saveData()
