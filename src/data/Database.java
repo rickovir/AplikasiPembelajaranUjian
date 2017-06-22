@@ -28,7 +28,7 @@ public class Database {
         init();
     }
     // function for initialize connection and build that
-    public void init()
+    protected void init()
     {
         // this is initialitation  for connection
         if(connection == null)
@@ -49,7 +49,7 @@ public class Database {
         }
     }
     // this function used to select data from a table and return back it with ResultSet Object
-    public ResultSet selectDataTable(String sql)
+    protected ResultSet selectDataTable(String sql)
     {
         ResultSet resultSet = null;
         try
@@ -63,7 +63,7 @@ public class Database {
         return resultSet;
     }
     // this function used to generate sql script that can modify a table like insert, update or delete rows from that table
-    public void modifyDataTable(String sql)
+    protected void modifyDataTable(String sql)
     {
         try
         {
@@ -75,7 +75,7 @@ public class Database {
         }
     }
     // this function used to close JDBC connection
-    public void closeService()
+    protected void closeService()
     {
         try{
             connection.close();

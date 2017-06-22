@@ -5,6 +5,7 @@
  */
 package data;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -19,8 +20,13 @@ public class Model extends Database{
     {
         super();
         field = new TableField();
+        sql = "";
     }
-    
+    public void reset()
+    {
+        sql = "";
+        field = new TableField();
+    }
     public void insert(String table, Object data)
     {
         sql = "insert into "+table;
@@ -29,23 +35,35 @@ public class Model extends Database{
         ArrayList<String> col = field.getField();
         ArrayList<String> val = field.getValue();
         
+        String block = "id"+table;
+        
+        col.remove("modelTable");
+        col.remove("tableField");
+        
         sql = sql + "(";
         for(int i=0; i<col.size(); i++)
         {
-            sql = sql + col.get(i);
-            if(i < (col.size()-1))
-                sql = sql + ",";
+            if(col.get(i) != block)
+            {
+                sql = sql + col.get(i);
+                if(i < (col.size()-1))
+                    sql = sql + ",";
+            }
         }
-        sql = sql + ") values (";
-        for(int i=0; i<val.size(); i++)
+        sql = sql + ") values(";
+        for(int i=0; i<col.size(); i++)
         {
-            sql = sql + "'"+val.get(i)+"'";
-            if(i < (val.size()-1))
-                sql = sql + ",";
+            if(col.get(i) != block)
+            {
+                sql = sql + "'"+val.get(i)+"'";
+                if(i < (col.size()-1))
+                    sql = sql + ",";
+            }
         }
         sql = sql + ")";
         modifyDataTable(sql);
-    }
+        reset();
+   }
     
     public void update(String table, Object data)
     {
@@ -57,9 +75,9 @@ public class Model extends Database{
         
     }
     
-    public Object selectAll(String table)
+    public ResultSet selectAll(String table)
     {
-        Object result;
+        ResultSet result;
         sql = "select * from "+table;
         result = selectDataTable(sql);
         return result;

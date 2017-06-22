@@ -29,6 +29,7 @@ public class TableField {
         {
             Class<?> clazz = o.getClass();
             for(Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
                 this.field.add(field.getName());
                 this.value.add(field.get(o).toString());
             }

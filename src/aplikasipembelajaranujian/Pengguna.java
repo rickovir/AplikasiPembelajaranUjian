@@ -6,6 +6,13 @@
 package aplikasipembelajaranujian;
 import java.io.*;
 import data.Model;
+import data.TableField;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author hp431
@@ -20,6 +27,7 @@ public class Pengguna {
     private String password;
     private int verificationStatus;
     private Model modelTable;
+    private TableField tableField;
     
     public Pengguna()
     {
@@ -30,6 +38,7 @@ public class Pengguna {
         password = "";
         verificationStatus = 0;
         modelTable = new Model();
+        tableField = new TableField();
     }
     
     public int getIdPengguna()
@@ -100,11 +109,43 @@ public class Pengguna {
     }
     public void simpan()
     {
-        String sql = "insert into pengguna(namaPengguna, "
-                + "username, password, verificationStatus, idKelas) values("
-                + "'"+namaPengguna+"', '"+username+"',"
-                + "'"+password+"', '"+verificationStatus+"', '"+idKelas+"')";
-        //db.insert(sql);
+        modelTable.insert("pengguna", this);
+    }
+    
+    public JTable getTableData() // import jtable
+    {
+        DefaultTableModel tbl = new DefaultTableModel(); // import table model
+        ArrayList<String> rowsName = new ArrayList<String>(); //import array list
+        JTable resTableModel = new JTable();
+        ResultSet rows;
+        tableField.setField(this);
+        tableField.getField().remove("modelTable");
+        tableField.getField().remove("tableField");
+        for(int i=0; i<tableField.getField().size(); i++)
+        {
+            tbl.addColumn(tableField.getField().get(i));
+            rowsName.add(tableField.getField().get(i));
+        }
+        resTableModel.setModel(tbl);
+        try
+        {
+            rows = modelTable.selectAll("pengguna");
+            while(rows.next())
+            {
+                Object[] objectTable = new Object[rowsName.size()];
+                for(int i=0; i<rowsName.size(); i++)
+                {
+                    objectTable[i] = rows.getString(rowsName.get(i));
+                }
+                tbl.addRow(objectTable);
+                resTableModel.setModel(tbl);
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error : "+e);
+        }
+        return resTableModel;
     }
     
     public void saveData()
