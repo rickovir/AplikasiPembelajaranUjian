@@ -4,15 +4,15 @@
  * and open the template in the editor.
  */
 package aplikasipembelajaranujian;
+// yang perlu di import ke class
 import java.io.*;
 import data.Model;
-import data.TableField;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author hp431
@@ -26,8 +26,7 @@ public class Pengguna {
     private String username;
     private String password;
     private int verificationStatus;
-    private Model modelTable;
-    private TableField tableField;
+    private Model model; // untuk operasi database
     
     public Pengguna()
     {
@@ -37,8 +36,7 @@ public class Pengguna {
         username ="";
         password = "";
         verificationStatus = 0;
-        modelTable = new Model();
-        tableField = new TableField();
+        model = new Model();
     }
     
     public int getIdPengguna()
@@ -101,127 +99,118 @@ public class Pengguna {
         idPengguna = newIdPengguna;
     }
     
-    public void editBiodata(String newNama, String newEmail, int newKelas)
+    public void setIdPengguna()
     {
-        namaPengguna = newNama;
-        username = newEmail;
-        idKelas = newKelas;
-    }
-    public void simpan()
-    {
-        modelTable.insert("pengguna", this);
+        idPengguna = model.randInt(10000, 99999); // set id dengan random integer
     }
     
-    public JTable getTableData() // import jtable
+    public void simpan()
     {
-        DefaultTableModel tbl = new DefaultTableModel(); // import table model
-        ArrayList<String> rowsName = new ArrayList<String>(); //import array list
-        JTable resTableModel = new JTable();
-        ResultSet rows;
-        tableField.setField(this);
-        tableField.getField().remove("modelTable");
-        tableField.getField().remove("tableField");
-        for(int i=0; i<tableField.getField().size(); i++)
-        {
-            tbl.addColumn(tableField.getField().get(i));
-            rowsName.add(tableField.getField().get(i));
-        }
-        resTableModel.setModel(tbl);
+        // penampung data dalam bentuk string arraylist yg akan di insert
+        ArrayList<String> row= new ArrayList<String>();
+        
+        // add data yang mau di insert
+        row.add(String.valueOf(idPengguna));
+        row.add(namaPengguna);
+        row.add(username);
+        row.add(password);
+        row.add(String.valueOf(verificationStatus));
+        row.add(String.valueOf(idKelas));
+        // insert ke database model.insert("nama table", row);
+        model.insert("pengguna", row);
+    }
+    public void ubah()
+    {
+        // penampung data
+        ArrayList<String> col = new ArrayList<String>(); // untuk nama kolomnya
+        ArrayList<String> row= new ArrayList<String>();  // untuk isi barisnya yang mau di update
+        
+        // nama nama kolom table pengguna
+        col.add("idPengguna");
+        col.add("namaPengguna");
+        col.add("username");
+        col.add("password");
+        col.add("verificationStatus");
+        col.add("idKelas");
+        // baris data yang mau diubah di table pengguna
+        row.add(String.valueOf(idPengguna));
+        row.add(namaPengguna);
+        row.add(username);
+        row.add(password);
+        row.add(String.valueOf(verificationStatus));
+        row.add(String.valueOf(idKelas));
+        
+        // update table ke database model.update("nama table", col, row);
+        model.update("pengguna", col, row);
+    }
+    public void hapus()
+    {
+        // delete data ke database model.delete("nama table", id);
+        model.delete("pengguna", idPengguna);
+    }
+    
+    // fungsi kembali nilai List Class Pengguna buat ambil data dari database
+    public List<Pengguna> ambilDataPengguna()
+    {
+        List<Pengguna> res = new ArrayList<Pengguna>(); // membuat list class pengguna
+        // model.selectAll("nama table"); untuk select data dan di jadikan result set
+        ResultSet data = model.selectAll("pengguna");
+        
         try
         {
-            rows = modelTable.selectAll("pengguna");
-            while(rows.next())
+            while(data.next())
             {
-                Object[] objectTable = new Object[rowsName.size()];
-                for(int i=0; i<rowsName.size(); i++)
-                {
-                    objectTable[i] = rows.getString(rowsName.get(i));
-                }
-                tbl.addRow(objectTable);
-                resTableModel.setModel(tbl);
+                // variabel newpengguna untuk menampung data dari database, tipe datanya class Pengguna
+                Pengguna newPengguna = new Pengguna();
+                
+                // ini untuk masukan data dari database ke objek newPengguna
+                // kalo di Classnya integer maka perlu di translate ke integer dulu pake Integer.valueOf( data string )
+                newPengguna.idPengguna = Integer.valueOf(data.getString("idPengguna"));
+                newPengguna.namaPengguna = data.getString("namaPengguna");
+                newPengguna.username = data.getString("username");
+                newPengguna.password = data.getString("password");
+                newPengguna.verificationStatus = Integer.valueOf(data.getString("verificationStatus"));
+                newPengguna.idKelas = Integer.valueOf(data.getString("idKelas"));
+                
+                // lalu data newPengguna tersebut di kirim ke result set tadi
+                res.add(newPengguna);
+            }
+        }  
+        catch(Exception e) // catch buat kalo error pas udah running
+        {
+            JOptionPane.showMessageDialog(null, "Gagal "+e);
+        }
+        // kemudian di keluarkan/dikembalikan
+        return res;
+    }
+    
+    // sama aja seperti yg diatas cuma ini untuk search data
+    public List<Pengguna> ambilDataPengguna(String searchKey)
+    {
+        List<Pengguna> res = new ArrayList<Pengguna>();
+        // ini buat mencari data ada inputan nama kolom itu kolom apa yg mu di cari 
+        // model.selectOption("nama table").like("nama kolom", searchKey)
+        ResultSet data = model.selectOption("pengguna").like("namaPengguna", searchKey);
+        // kebawah sama seperti yg sebelumnya
+        try
+        {
+            while(data.next())
+            {
+                Pengguna newPengguna = new Pengguna();
+                newPengguna.idPengguna = Integer.valueOf(data.getString("idPengguna"));
+                newPengguna.namaPengguna = data.getString("namaPengguna");
+                newPengguna.username = data.getString("username");
+                newPengguna.password = data.getString("password");
+                newPengguna.verificationStatus = Integer.valueOf(data.getString("verificationStatus"));
+                newPengguna.idKelas = Integer.valueOf(data.getString("idKelas"));
+                
+                res.add(newPengguna);
             }
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, "Error : "+e);
+            JOptionPane.showMessageDialog(null, "Gagal "+ e);
         }
-        return resTableModel;
-    }
-    
-    public void saveData()
-    {
-//        String fileName = "Pengguna.txt";
-//
-//        try {
-//            // Assume default encoding.
-//            FileWriter fileWriter =
-//                new FileWriter(fileName);
-//
-//            // Always wrap FileWriter in BufferedWriter.
-//            BufferedWriter bufferedWriter =
-//                new BufferedWriter(fileWriter);
-//
-//            // Note that write() does not automatically
-//            // append a newline character.
-//            bufferedWriter.write("Hello there,");
-//            bufferedWriter.write(" here is some text.");
-//            bufferedWriter.newLine();
-//            bufferedWriter.write("We are writing");
-//            bufferedWriter.write(" the text to the file.");
-//
-//            // Always close files.
-//            bufferedWriter.close();
-//        }
-//        catch(IOException ex) {
-//            System.out.println(
-//                "Error writing to file '"
-//                + fileName + "'");
-//            // Or we could just do this:
-//            // ex.printStackTrace();
-//        }
-                String FILENAME = "src/data/Pengguna.txt";
-		BufferedWriter bw = null;
-		FileWriter fw = null;
-
-		try {
-
-			String data = " This is new content";
-
-			File file = new File(FILENAME);
-
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			// true = append file
-			fw = new FileWriter(file.getAbsoluteFile(), true);
-			bw = new BufferedWriter(fw);
-
-			bw.write("#namaPengguna:" + namaPengguna);
-			bw.write("#email:" + username);
-                        bw.newLine();
-			System.out.println("Done");
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
-		} finally {
-
-			try {
-
-				if (bw != null)
-					bw.close();
-
-				if (fw != null)
-					fw.close();
-
-			} catch (IOException ex) {
-
-				ex.printStackTrace();
-
-			}
-		}
-
+        return res;
     }
 }

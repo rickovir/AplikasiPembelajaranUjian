@@ -135,8 +135,8 @@ public class Biodata extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSimpanActionPerformed
-        user.editBiodata(textNama.getText(), textEmail.getText(), Integer.parseInt(comboKelas.getSelectedItem().toString()));
-        user.saveData();
+//        user.editBiodata(textNama.getText(), textEmail.getText(), Integer.parseInt(comboKelas.getSelectedItem().toString()));
+        
         bersih();
     }//GEN-LAST:event_buttonSimpanActionPerformed
     private void bersih()

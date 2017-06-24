@@ -19,10 +19,10 @@ public class Database {
     private Connection connection;
     private Statement statement;
     
-    public Database()
+    protected Database()
     {
         // definition connection setting
-        dbUrl = "jdbc:mysql://localhost:3306/pembelajaran_ujian";
+        dbUrl = "jdbc:mysql://localhost:3306/pembelajaran_ujian2";
         username = "root";
         password = "";
         init();

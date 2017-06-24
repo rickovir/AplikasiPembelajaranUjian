@@ -6,21 +6,34 @@
  */
 package aplikasipembelajaranujian;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import data.Model;
 /**
  *
  * @author hp431
  */
 public class TingkatKelas {
-    private int tingkatan;
+    private int idKelas;
     private String namaKelas;
+    private Model model;
     
-    public void setTingkatan(int newTingkat)
+    public TingkatKelas()
     {
-        tingkatan = newTingkat;
+        idKelas = 0;
+        namaKelas ="";
+        model = new Model();
     }
-    public int getTingkatan()
+    
+    public void setIdKelas(int newIdKelas)
     {
-        return tingkatan;
+        idKelas = newIdKelas;
+    }
+    public int getIdKelas()
+    {
+        return idKelas;
     }
     public void setNamaKelas(String newNamaKelas)
     {
@@ -42,8 +55,24 @@ public class TingkatKelas {
     {
         
     }
-    public void tampil()
+    public List<TingkatKelas> ambilDataKelas()
     {
-        
+        List<TingkatKelas> res = new ArrayList<TingkatKelas>();
+        ResultSet data = model.selectAll("tingkatKelas");
+        try
+        {
+            while(data.next())
+            {
+                TingkatKelas kelas = new TingkatKelas();
+                kelas.idKelas = Integer.valueOf(data.getString("idKelas").toString());
+                kelas.namaKelas = data.getString("namaKelas").toString();
+                res.add(kelas);
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Gagal "+e);
+        }
+        return res;
     }
 }

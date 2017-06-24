@@ -7,6 +7,7 @@ package data;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -14,65 +15,66 @@ import java.util.ArrayList;
  */
 public class Model extends Database{
     private String sql;
-    private TableField field;
     
     public Model()
     {
         super();
-        field = new TableField();
         sql = "";
     }
     public void reset()
     {
         sql = "";
-        field = new TableField();
     }
-    public void insert(String table, Object data)
+    public void insert(String table, ArrayList<String> cols, ArrayList<String> rows)
     {
-        sql = "insert into "+table;
-        field.setField(data);
-        
-        ArrayList<String> col = field.getField();
-        ArrayList<String> val = field.getValue();
-        
-        String block = "id"+table;
-        
-        col.remove("modelTable");
-        col.remove("tableField");
-        
-        sql = sql + "(";
-        for(int i=0; i<col.size(); i++)
+        sql = "insert into "+table+"(";
+        for(int i=0; i<cols.size(); i++)
         {
-            if(col.get(i) != block)
-            {
-                sql = sql + col.get(i);
-                if(i < (col.size()-1))
-                    sql = sql + ",";
-            }
+            sql = sql + cols.get(i);
+            if(i < cols.size()-1)
+                sql = sql+",";
         }
         sql = sql + ") values(";
-        for(int i=0; i<col.size(); i++)
+        for(int i=0; i<rows.size(); i++)
         {
-            if(col.get(i) != block)
-            {
-                sql = sql + "'"+val.get(i)+"'";
-                if(i < (col.size()-1))
-                    sql = sql + ",";
-            }
+            sql = sql + "'" +rows.get(i)+"'";
+            if(i < rows.size()-1)
+                sql = sql+",";
         }
         sql = sql + ")";
         modifyDataTable(sql);
-        reset();
-   }
+    }
     
-    public void update(String table, Object data)
+    public void insert(String table, ArrayList<String> rows)
     {
-        
+        sql = "insert into "+table+" values(";
+        for(int i=0; i<rows.size(); i++)
+        {
+            sql = sql + "'" +rows.get(i)+"'";
+            if(i < rows.size()-1)
+                sql = sql+",";
+        }
+        sql = sql + ")";
+        modifyDataTable(sql);
+    }
+    
+    public void update(String table, ArrayList<String> cols, ArrayList<String> rows)
+    {
+        sql = "update "+table+ " set ";
+        for(int i=1; i<rows.size(); i++)
+        {
+            sql = sql + cols.get(i) +" = '" +rows.get(i)+"'";
+            if(i < rows.size()-1)
+                sql = sql+",";
+        }
+        sql = sql + " where "+ cols.get(0)+ " = "+rows.get(0);
+        modifyDataTable(sql);
     }
     
     public void delete(String table, int id)
     {
-        
+        sql = "delete from "+table+" where id"+table+" = '"+id+"'";
+        modifyDataTable(sql);
     }
     
     public ResultSet selectAll(String table)
@@ -85,28 +87,41 @@ public class Model extends Database{
     
     public Model selectOption(String table)
     {
-        Model option = null;
+        Model option = new Model();
         sql = "select * from "+table;
         option = this;
         return option;
     }
     
-    public Object where(Object ob)
+    public ResultSet where(Object ob)
     {
-        Object result;
-        
-        field.setField(ob);
-        
-        ArrayList<String> col = field.getField();
-        ArrayList<String> val = field.getValue();
-        
-        for(int i=0; i<col.size(); i++)
-        {
-            sql = sql + " " +col.get(i)+" = "+val.get(i);
-            if(i < (col.size()-1))
-                sql = sql + " AND";
-        }
-        result = selectDataTable(sql);
-        return result;
+        ResultSet res = null;
+        return res;
     }
+    public ResultSet like(String col, String key)
+    {
+        ResultSet res;
+        sql = sql + " where " + col + " like '%"+key+"%' ";
+        System.out.println(sql);
+        res = selectDataTable(sql);
+        return res;
+    }
+    
+    public int randInt(int min, int max) {
+
+    // NOTE: This will (intentionally) not run as written so that folks
+    // copy-pasting have to think about how to initialize their
+    // Random instance.  Initialization of the Random instance is outside
+    // the main scope of the question, but some decent options are to have
+    // a field that is initialized once and then re-used as needed or to
+    // use ThreadLocalRandom (if using at least Java 1.7).
+    Random rand = new Random();
+
+    // nextInt is normally exclusive of the top value,
+    // so add 1 to make it inclusive
+    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+    return randomNum;
+    }
+    
 }
